@@ -13,7 +13,7 @@ This project is desgined to work only with ESP32 modules, given their built-in W
 
 BOM
 ---
-* 1 x DFROBOT Firebeetle ESP32 V4 (or ny other ESP32 board, check hardware pinout)
+* 1 x DFROBOT Firebeetle ESP32 V4 (or any other ESP32 board, check hardware pinout)
 * 1 x 128 x 160 SPI TFT display with the ST7735 driver
 * 4 x GPIO buttons panel
 * 1 x DHT22 temperature and humidity sensor
