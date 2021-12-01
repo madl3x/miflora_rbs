@@ -34,7 +34,7 @@ The [data/config.cfg](data/config.cfg.sample) overrides the compile-time configu
 
 Plants
 ---
-For configuring your plants, check the [data/devices.cfg](data/devices.cfg) SPIFFS file.
+For configuring your plants, check the [data/devices.cfg](data/devices.cfg.sample) SPIFFS file.
 
 This file allows you to give each plant a name, an unique ID and the limits for each monitored characteristic (like minimum moisture, or maximum temperature).
 
