@@ -28,9 +28,9 @@ Station
 ---
 Configuration for a station can be done in two ways:
 * at compile time, using the [include/default_config.h](/include/default_config.h) include file;
-* at run-time, using the [data/config.cfg](data/config.cfg) file stored on the SPIFFS partition.
+* at run-time, using the [data/config.cfg](data/config.cfg.sample) file stored on the SPIFFS partition.
 
-The [data/config.cfg](data/config.cfg) overrides the compile-time configuration, and it's useful for programming multiple stations with the same generic firmware binary, while keeping a given set of options specific to that station (e.g.: the station's name).
+The [data/config.cfg](data/config.cfg.sample) overrides the compile-time configuration, and it's useful for programming multiple stations with the same generic firmware binary, while keeping a given set of options specific to that station (e.g.: the station's name).
 
 Plants
 ---
