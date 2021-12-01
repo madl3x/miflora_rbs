@@ -267,6 +267,7 @@ void DisplayScreen_MiFloraFleet::updateFor(MiFloraDevice * device) {
     sprintf(seen, "%u sec", (unsigned int) ( lastUpdated/1000));
   } else
   if (lastUpdated < 3600000) {
+    sprintf(seen, "%u min", (unsigned int) ( lastUpdated/(60*1000)));
   } else 
   if (lastUpdated < 3600000 * 24 * 2) {
     sprintf(seen, "%u h", (unsigned int) ( lastUpdated/(60*60*1000) ));
