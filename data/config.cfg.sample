@@ -1,0 +1,68 @@
+; Template configuration for a particular station.
+;
+; The options here are meant to override (at run-time) those defined in the
+; "default_config.h" file. This way you can apply specific options to each 
+; station, even if they run the same firmware binary, compiled with the same
+; "default_config.h" file.
+;
+; One of these options is the 'station:name' option must be different from one 
+; station to another.
+;
+; If you have multiple stations, make sure they share the same 
+; 'station:root_topic' and the same 'homeassistant:;central_device_id', or leave 
+; these option to their default values.
+;
+;[station]
+name=station_1
+;base_topic=miflora_rbs
+;availability_topic=flora2/station/white/status
+;command_topic=flora2/station/white/command
+;payload_offline= "online"
+;payload_online= "offline"
+
+; uncomment this to configure your WiFi for this station
+;[wifi]
+;ssid=WIFISSID
+;password=password
+
+; uncomment this to configure MQTT broker
+;[mqtt]
+;host     = 192.168.1.1
+;port     = 1883
+;clientid = miflora-station1-clientid
+;username =
+;password =
+
+;[dht]
+;base_topic=miflora_rbs/station/name/dht
+;publish_min_interval_sec=60
+;mqtt_retain=false
+
+;[flora]
+;base_topic=miflora_rbs
+;publish_min_interval_sec=10
+;mqtt_collaborate=true
+;mqtt_retain=true
+;discover_devices=true
+
+;[homeassistant]
+;discovery_topic_prefix=homeassistant
+;central_device_id=miflora_plants
+;station_device_id=miflora_rbs_station_name
+;station_suggested_area=studio
+;publish_central_device=true
+;mqtt_retain=true
+
+;[display]
+;refresh_sec = 5
+;cycle_pages_sec = 20
+;cycle_pages_start_sec = 120
+;backlight_off_sec = 60
+
+;[ble]
+;can_duration_sec=30
+;scan_wait_sec=30
+;scan_interval_ms=60
+;window_interval_ms=30
+;active_scan = true
+;verbose = false
