@@ -52,6 +52,12 @@ bool HomeAssistant::begin() {
     return true;
 }
 
+void HomeAssistant::restart() {
+
+    // restart discover task
+    taskDiscover.restart();
+}
+
 bool HomeAssistant::prepareBuffer() {
 
     if (bufferFormat != NULL) {
@@ -109,7 +115,7 @@ std::string HomeAssistant::getDeviceID(DeviceIDType type) {
         if (config.hass_central_device_id != NULL) {
             device_id.assign(config.hass_central_device_id);
         } else {
-            device_id.assign("miflora_rbs_central");
+            device_id.assign("miflora_plants");
         }
         
     } else
@@ -123,6 +129,9 @@ std::string HomeAssistant::getDeviceID(DeviceIDType type) {
             device_id.assign("miflora_rbs_");
             device_id.append(config.station_name);
         }
+    } else {
+        // should not happen
+        LOG_F("unknown device type (%d)!!!", (int) type);
     }
 
     return device_id;
@@ -323,7 +332,7 @@ std::string HomeAssistant::jsonMiFloraAttribute(MiFloraDevice * flora_device, At
             unit = "dB";
             entity_name.append(" rssi");
             unique_id.append("rssi");
-            config.formatTopic(state_topic, ConfigMain::MQTT_TOPIC_FLORA, flora_address, "moisture");
+            config.formatTopic(state_topic, ConfigMain::MQTT_TOPIC_FLORA, flora_address, "rssi");
         } break;
         default: 
             // should not happen

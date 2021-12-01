@@ -40,7 +40,9 @@ class HomeAssistant {
         };
     public:
         HomeAssistant();
+        
         bool begin();
+        void restart();
 
     protected:
         Task     taskDiscover;

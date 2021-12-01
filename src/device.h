@@ -227,10 +227,6 @@ class MiFloraDevice : public Device {
 };
 
 /* inlines for MiFloraDevice */
-inline void MiFloraDevice::updateRSSI(int rssi) {
-  RSSI.set(rssi, SOURCE_BLE);
-}
-
 inline const std::string & MiFloraDevice::getAddress() {
   return _address;
 }

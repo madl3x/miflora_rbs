@@ -1,10 +1,3 @@
-#include "config.h"
-#include "xiaomi.h"
-#include "ble_tracker.h"
-#include "ui.h"
-#include "ota.h"
-#include "scheduler.h"
-#include "buttons.h"
 /*
  *   MIT License
  *
@@ -29,6 +22,13 @@
  *  Copyright (c) 2021 Alex Mircescu
  */
 
+#include "config.h"
+#include "xiaomi.h"
+#include "ble_tracker.h"
+#include "ui.h"
+#include "ota.h"
+#include "scheduler.h"
+#include "buttons.h"
 #include "network.h"
 #include "dht_sensor.h"
 #include "hass.h"
@@ -53,7 +53,9 @@ DisplayScreen_MiFloraAttributes screenAttrTemp  (ATTR_ID_TEMPERATURE);
 DisplayScreen_MiFloraAttributes screenAttrLight (ATTR_ID_ILLUMINANCE);
 DisplayScreen_MiFloraAttributes screenAttrRSSI  (ATTR_ID_RSSI);
 DisplayScreen_Station           screenStation;
-DisplayScreen_Config            screenConfig;
+
+// for debug only
+//DisplayScreen_Config            screenConfig;
 
 int comparePayload(uint8_t * payload, const char * term, unsigned int payload_len) {
   
@@ -122,18 +124,15 @@ void onMQTT_BLECommand(const char *, uint8_t * payload, unsigned int len, void *
     return;
   }
 }
+
 /*
  * Setting up the main loop task
  */
-
 void setup() {
   bool success;
   
   // initialize serial
   Serial.begin(115200);
-
-  // increase boot count
-  //bootCount++;
 
   // prepare config fs
   success = DataFS::mount();
@@ -144,7 +143,7 @@ void setup() {
   BOOT_PRINT_S(success, "Loading config (#%d)", config.countValues());
 
     if (success == false) {
-      LOG_LN("\r\n!!! Failed loading configuration, using compile-time defaults!!");
+      LOG_LN("!!! Failed loading configuration, using compile-time defaults!!");
     }
 
   // print configuration to serial
@@ -222,7 +221,9 @@ void setup() {
 
   // station screen, shows information about the station
   display.screenAdd(&screenStation);
-  display.screenAdd(&screenConfig);
+
+  // for debug only
+  //display.screenAdd(&screenConfig);
 
   // go to the default screen
   display.screenSelect(&screenFleet);
@@ -297,23 +298,28 @@ bool onButtonsEvent(Buttons::Events event, uint8_t btn) {
   if (event == Buttons::EVENT_PRESS) {
 
     switch(btn) {
+
+      // move to previous page
       case Buttons::BTN_PREV: {
         display.prev();
         handled = true;
       } break;
 
+      // move to next page
       case Buttons::BTN_NEXT: {
         display.next();
         handled = true;
       } break;
 
+      // show station screen
       case Buttons::BTN_MODEA: {
-        if (display.getCurrentScreen() != &screenStation) {
-          display.screenSelect(&screenStation);
-        } else {
-          display.screenNext();
-        }
+        display.screenSelect(&screenStation);
         handled = true;
+      } break;
+
+      // show moisture screen
+      case Buttons::BTN_MODEB: {
+        display.screenSelect(&screenAttrMoist);
       } break;
     }
 
@@ -321,31 +327,34 @@ bool onButtonsEvent(Buttons::Events event, uint8_t btn) {
 
   // on release
   if (event == Buttons::EVENT_RELEASE) {
-    if (btn == Buttons::BTN_MODEA ) {
-      display.getUpdateTask().setInterval(config.display_refresh_sec * TASK_SECOND);
-      handled = true;
-    }
+    
+    // nothing to do here
+
   } else
 
   // on long press
   if (event == Buttons::EVENT_LONG_PRESS) {
 
     switch(btn) {
+      // move to prev screen
       case Buttons::BTN_PREV: {
         display.screenPrev();
         handled = true;
       } break;
 
+      // move to next screen
       case Buttons::BTN_NEXT: {
         display.screenNext();
         handled = true;
       } break;
 
+      // redo HASS discovery
       case Buttons::BTN_MODEA: {
-        display.getUpdateTask().setInterval(500);
-        handled = true;
+        LOG_LN("Restarting HASS discovery..");
+        hass.restart();
       } break;
 
+      // restart
       case Buttons::BTN_MODEB: {
         LOG_LN("Restarting core..");
         ESP.restart();

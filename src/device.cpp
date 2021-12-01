@@ -134,6 +134,24 @@ void MiFloraDevice::updateFromBLEScan(XiaomiParseResult & result) {
   }
 }
 
+inline void MiFloraDevice::updateRSSI(int rssi) {
+
+  unsigned long now = millis();
+  std::string topic;
+  char value[16];
+
+  // publish RSSI on MQTT
+  if ((now - RSSI.lastUpdated()) > config.flora_publish_min_interval_sec) {
+    sprintf(value, "%d", rssi);
+
+    config.formatTopic(topic, ConfigMain::MQTT_TOPIC_FLORA, _address.c_str(), "rssi");
+    mqtt.publish(topic.c_str(), value, config.flora_mqtt_retain);
+  }
+
+  // update attribute
+  RSSI.set(rssi, SOURCE_BLE);
+}
+
 /* update device attributes via MQTT message */
 void MiFloraDevice::updateFromMQTT(const char * topic, uint8_t * _payload, unsigned int len) {
 
