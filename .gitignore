@@ -1,35 +1,12 @@
-# Prerequisites
-*.d
+# Ignore custom configurations (samples have .sample extension)
+data/config.cfg
+data/devices.cfg
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Platform IO internal kitchen
+.pio/
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Visual Studio Code files
+.vscode/
 
 # MAC Finder
 .DS_Store
