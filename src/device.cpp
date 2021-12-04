@@ -73,7 +73,8 @@ void MiFloraDevice::updateFromBLEScan(XiaomiParseResult & result) {
   // TEMPERATURE
   if (result.has_temperature) {
 
-    if ((now - temperature.lastUpdated())/1000 > config.flora_publish_min_interval_sec) {
+    // publish to mqtt
+    if (temperature.isOlder(config.flora_publish_min_interval_sec, now)) {
       sprintf(value, "%.2f", result.temperature);
 
       config.formatTopic(topic, ConfigMain::MQTT_TOPIC_FLORA, _address.c_str(), "temp");
@@ -89,7 +90,8 @@ void MiFloraDevice::updateFromBLEScan(XiaomiParseResult & result) {
   // CONDUCTIVITY
   if (result.has_conductivity) {
 
-    if ((now - conductivity.lastUpdated()) > config.flora_publish_min_interval_sec) {
+    // publish to mqtt
+    if (conductivity.isOlder(config.flora_publish_min_interval_sec, now)) {
       sprintf(value, "%u", (unsigned int) result.conductivity);
 
       config.formatTopic(topic, ConfigMain::MQTT_TOPIC_FLORA, _address.c_str(), "conductivity");
@@ -105,7 +107,8 @@ void MiFloraDevice::updateFromBLEScan(XiaomiParseResult & result) {
   // LIGHT
   if (result.has_illuminance) {
 
-    if ((now - illuminance.lastUpdated()) > config.flora_publish_min_interval_sec) {
+    // publish to mqtt
+    if (illuminance.isOlder(config.flora_publish_min_interval_sec, now)) {
       sprintf(value, "%u", (unsigned int) result.illuminance);
 
       config.formatTopic(topic, ConfigMain::MQTT_TOPIC_FLORA, _address.c_str(), "light");
@@ -120,7 +123,8 @@ void MiFloraDevice::updateFromBLEScan(XiaomiParseResult & result) {
   // MOISTURE
   if (result.has_moisture) {
 
-    if ((now - moisture.lastUpdated()) > config.flora_publish_min_interval_sec) {
+    // publish to mqtt
+    if (moisture.isOlder(config.flora_publish_min_interval_sec, now)) {
       sprintf(value, "%u", (unsigned int) result.moisture);
 
       config.formatTopic(topic, ConfigMain::MQTT_TOPIC_FLORA, _address.c_str(), "moisture");
@@ -141,9 +145,9 @@ inline void MiFloraDevice::updateRSSI(int rssi) {
   char value[16];
 
   // publish RSSI on MQTT
-  if ((now - RSSI.lastUpdated()) > config.flora_publish_min_interval_sec) {
+  if (RSSI.isOlder(config.flora_publish_min_interval_sec, now)) {
+    
     sprintf(value, "%d", rssi);
-
     config.formatTopic(topic, ConfigMain::MQTT_TOPIC_FLORA, _address.c_str(), "rssi");
     mqtt.publish(topic.c_str(), value, config.flora_mqtt_retain);
   }

@@ -93,6 +93,14 @@ class DeviceAttribute {
     unsigned long lastUpdated() {
       return _last_updated;
     }
+
+    bool isOlder(unsigned long seconds, unsigned long _now = millis()) {
+      return isOlderMs(seconds * 1000, _now);
+    }
+    
+    bool isOlderMs(unsigned long ms, unsigned long _now = millis()) {
+      return (_now - _last_updated) > ms;
+    }
     
     bool set(const float v, UpdateSource source){ 
         _value = v; 

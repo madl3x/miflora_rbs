@@ -143,22 +143,20 @@ void Network::taskCheckWiFiCbk() {
                 return;
             } 
 
-            // connected
-            ledstrip.setPixelColor(1, 0, 255, 0);
+            // mqtt connected => ledstrip is now in control of MQTT commands
+            ledstrip.clear();
             ledstrip.show();
 
             // change state to connected (keep lights on for a 2 more seconds)
             state = STATE_MQTT_CONNECTED;
-            taskCheckWiFi.setInterval(2000);
-            taskCheckWiFi.restartDelayed();
+            taskCheckWiFi.setInterval(100);
+            taskCheckWiFi.restart();
         } break;
 
         // MQTT is connected
         case STATE_MQTT_CONNECTED: {
 
-            // turn ledstrip off
-            ledstrip.clear();
-            ledstrip.show();
+            // for the moment we have nothing to do in this state
 
             // all connected, move to verifying network periodically
             state = STATE_VERIFY_NETWORK;
@@ -171,17 +169,30 @@ void Network::taskCheckWiFiCbk() {
 
             // if WiFi disconnected meanwhile, move back to connecting state
             if (WiFi.isConnected() == false) {
+
+                // get back to connecting state
+                LOG_F("WiFi status is:%d, reconnecting..", WiFi.status());
                 state = STATE_WIFI_CONNECTING;
                 taskCheckWiFi.restart();
                 lastDisconnect = millis();
+
+                // reset ledstrip
+                ledstrip.clear();
+                ledstrip.show();
                 return;
             }
 
             // if MQTT disconnected meanwhile, move back to connecting state
             if (mqtt.state() != MQTT_CONNECTED) {
+
+                // get back to connecting state
                 LOG_F("MQTT state is:%d, reconnecting..", mqtt.state());
                 state = STATE_MQTT_CONNECTING;
                 taskCheckWiFi.restart();
+
+                // reset ledstrip
+                ledstrip.clear();
+                ledstrip.show();
                 return;
             }
 
