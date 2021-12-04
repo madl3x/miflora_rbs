@@ -31,10 +31,10 @@
 
 Network net;
 
-Network::Network() :
-    taskCheckWiFi(5000, TASK_FOREVER, s_taskCheckWiFiCbk, &scheduler, false),
-    state(STATE_DISCONNECTED) ,
-    wifiStatus(WL_DISCONNECTED){
+Network::Network() 
+    : taskCheckWiFi(5000, TASK_FOREVER, s_taskCheckWiFiCbk, &scheduler, false)
+    , state(STATE_DISCONNECTED)
+    , lastDisconnect(0) {
 
 }
 
@@ -43,6 +43,9 @@ void Network::begin() {
     // connect WiFi
     LOG_F("Wifi connect SSID:%s", config.wifi_ssid);
     WiFi.begin(config.wifi_ssid, config.wifi_password);
+
+    // remember last disconnect
+    lastDisconnect = millis();
 
     // connect WiFi
     state = STATE_WIFI_CONNECTING;
@@ -54,9 +57,16 @@ void Network::begin() {
 }
 
 void Network::end() {
+
+    // shtudown wifi
     WiFi.disconnect(true);
+
+    // disable reconnect task
     taskCheckWiFi.disable();
+
+    // set new state
     state = STATE_DISCONNECTED;
+    lastDisconnect = millis();
 }
 
 void Network::taskCheckWiFiCbk() {
@@ -94,26 +104,26 @@ void Network::taskCheckWiFiCbk() {
             }
 
             // restart WiFi is it doesn't connect for a given set of task iterations
-            // TODO: this doesn't work because ESP is crashing when a message is published
-            /*
-            if (taskCheckWiFi.getRunCounter() >= 20 && taskCheckWiFi.getRunCounter() % 20 == 0) {
-                ledstrip.setPixelColor(0, 255,255,0);
-                ledstrip.show();
+            if (config.wifi_restart_core_sec) {
+                uint16_t sec_passed = ((millis() - lastDisconnect)/1000);
 
-                // disconnect WiFi
-                WiFi.disconnect(true);
+                if (sec_passed > config.wifi_restart_core_sec) {
+                    LOG_LN(" ---- ");
+                    LOG_LN("Restarting core due to WiFi inactivity!");
+                    LOG_LN(" ---- ");
 
-                // move back to setup stage
-                state = STATE_WIFI_SETUP;
-                taskCheckWiFi.restartDelayed(500);
-            } */
+                    ESP.restart();
+
+                    // should not reach
+                    lastDisconnect = millis();
+                }
+            }
 
             // still connecting => toggle led 0
             ledstrip.setPixelColor(0, ledstrip.getPixelColor(0) ? 0 : 255,0,0);
             ledstrip.show();
 
             // check every second
-            wifiStatus = WiFi.status();
             taskCheckWiFi.setInterval(1000);
         } break;
 
@@ -163,6 +173,7 @@ void Network::taskCheckWiFiCbk() {
             if (WiFi.isConnected() == false) {
                 state = STATE_WIFI_CONNECTING;
                 taskCheckWiFi.restart();
+                lastDisconnect = millis();
                 return;
             }
 

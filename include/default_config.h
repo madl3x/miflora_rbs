@@ -35,6 +35,7 @@
 
 #define WIFI_SSID                        "WIFISSID" // <--- your WIFI SSID (if you don't want this hardcoded use "config.cfg")
 #define WIFI_PASSWORD                    "password" // <--- your WIFI password (if you don't want this hardcoded use "config.cfg")
+#define WIFI_RESTART_CORE_SEC                  120  // inteval in seconds restart the ESP core if WiFi doesn't connect (0 to disable)
 
 #define STATION_NAME                     "station1" // <--- the name of this station
 #define STATION_ROOT_TOPIC            "miflora_rbs" // root_topic, make sure this is common if you want the stations to collaborate

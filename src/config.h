@@ -117,6 +117,7 @@ class ConfigMain : public ConfigFile {
     /* WIFI settings */
     const char * wifi_ssid;
     const char * wifi_password;
+    uint16_t     wifi_restart_core_sec;
 
     /* Station settings */
     const char * station_name;

@@ -51,9 +51,8 @@ class Network {
 
     protected:
         Task taskCheckWiFi;
-        
         State state;
-        wl_status_t  wifiStatus;
+        unsigned long lastDisconnect;
 
         void taskCheckWiFiCbk();
         static void s_taskCheckWiFiCbk();
