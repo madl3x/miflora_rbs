@@ -198,9 +198,9 @@ void Network::taskCheckWiFiCbk() {
 
             // all good, publish signal
             static unsigned long lastPublished = 0;
-            unsigned long now = millis();
+            unsigned long now_sec = millis()/1000;
 
-            if ( (now - lastPublished) > 10000 ) {
+            if ((now_sec - lastPublished) > config.wifi_publish_min_interval_sec) {
                 std::string topic;
                 char val[6];
 
@@ -208,7 +208,7 @@ void Network::taskCheckWiFiCbk() {
                 sprintf(val, "%d", WiFi.RSSI());
                 mqtt.publish(topic.c_str(), val);
 
-                lastPublished = now;
+                lastPublished = now_sec;
             }
 
         } break;

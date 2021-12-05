@@ -429,6 +429,7 @@ bool ConfigMain::load() {
   wifi_ssid                      = get("wifi:ssid", WIFI_SSID);
   wifi_password                  = get("wifi:password", WIFI_PASSWORD);
   wifi_restart_core_sec          = getUInt("wifi:restart_core_sec", WIFI_RESTART_CORE_SEC);
+  wifi_publish_min_interval_sec  = getUInt("wifi:publish_min_interval_sec", WIFI_PUBLISH_MIN_INTERVAL_SEC);
 
   // DISPLAY
   display_refresh_sec            = getUInt("display:refresh_sec", DISPLAY_REFRESH_SEC);

@@ -252,6 +252,15 @@ std::string HomeAssistant::jsonDHTSensor(bool temperature, std::string & entity_
     unique_id   = entity_name;
     std::replace(unique_id.begin(), unique_id.end(), ' ', '_');
 
+    //
+    // Note; 
+    //       Flora attributes don't (yet) have an availability topic.
+    //       We can't use station's availability topic, because multiple 
+    //       stations could collaborate for publishing the same plant.
+    //       If one goes offline, the plant could still be monitored by 
+    //       other station.
+    //
+
     // format discovery string
     snprintf(
         bufferFormat, bufferSize,
@@ -259,14 +268,14 @@ std::string HomeAssistant::jsonDHTSensor(bool temperature, std::string & entity_
         "\"icon\": \"%s\"," ENDL
         "\"name\": \"%s\"," ENDL
         "\"state_topic\": \"%s\"," ENDL
-        "\"availability_topic\": \"%s\"," ENDL
+        //"\"availability_topic\": \"%s\"," ENDL
         "\"unique_id\": \"%s\"" ENDL
         ,
         unit, 
         icon,
         entity_name.c_str(),
         state_topic.c_str(),
-        availability_topic.c_str(),
+        //availability_topic.c_str(),
         unique_id.c_str()
     );
 

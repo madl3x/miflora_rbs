@@ -24,6 +24,8 @@ name=station_1
 ;[wifi]
 ;ssid=WIFISSID
 ;password=password
+;restart_core_sec=120
+;publish_min_interval_sec=120
 
 ; uncomment this to configure MQTT broker
 ;[mqtt]
