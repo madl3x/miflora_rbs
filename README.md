@@ -21,6 +21,15 @@ BOM
 * 1 x 1S LiPo battery (optional)
 * 1 x NPN BC547 tranzistor + 1 x 1K rezistor for turning off the display (optional)
 
+3D Printed Enclosure
+---
+For printing the enclosure check out the STL files from Thingiverse [#5173514](https://www.thingiverse.com/thing:5173514).
+The design was made in Autodesk Fusion and if you need to make any adjustments, the CAD file is provided.
+
+Photos
+---
+If you want to see how the device looks and how it was built, check this [Google Photos gallery](https://photos.app.goo.gl/VfcDRRomNDem76iUA).
+
 Configuration
 ===
 
